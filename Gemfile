@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 
+gem "nokogiri"
 gem "haml-rails", "~> 0.9"
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.5'
