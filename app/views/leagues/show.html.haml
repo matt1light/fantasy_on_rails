@@ -1,0 +1,10 @@
+%p#notice= notice
+%p
+  %strong Number:
+  = @league.number
+%p
+  %strong Site:
+  = @league.site
+= link_to 'Edit', edit_league_path(@league)
+|
+\#{link_to 'Back', leagues_path}

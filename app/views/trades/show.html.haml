@@ -1,0 +1,10 @@
+%p#notice= notice
+%p
+  %strong My value:
+  = @trade.my_value
+%p
+  %strong Other value:
+  = @trade.other_value
+= link_to 'Edit', edit_trade_path(@trade)
+|
+\#{link_to 'Back', trades_path}
