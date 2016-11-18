@@ -4,7 +4,7 @@ class CreatePlayers < ActiveRecord::Migration
       t.string :position
       t.boolean :starter
       t.string :name
-      t.decimal :value
+      t.integer :value
 
       t.timestamps null: false
     end
