@@ -3,16 +3,28 @@ class Team < ActiveRecord::Base
     belongs_to :league, inverse_of: :team
     has_and_belongs_to_many :trade, inverse_of: :team
     has_many :player, inverse_of: :team
-    
+
 
     def make_url
         if self.league.site == 'NFL'
-            puts 'http://canada.fantasy.nfl.com/league/' + self.league.number.to_s + '/team/' + self.number.to_s
-            return 'http://canada.fantasy.nfl.com/league/' + self.league.number.to_s + '/team/' + self.number.to_s
+            puts 'http://canada.fantasy.nfl.com/league/' +
+                 self.league.number.to_s +
+                 '/team/' +
+                 self.number.to_s
+            return 'http://canada.fantasy.nfl.com/league/' +
+                    self.league.number.to_s +
+                    '/team/' +
+                    self.number.to_s
         elsif self.league.site == 'ESPN'
-            return 'http://games.espn.com/ffl/clubhouse?leagueId=' + self.league.number.to_s + '8&teamId=' + self.number.to_s
+            return 'http://games.espn.com/ffl/clubhouse?leagueId=' +
+                    self.league.number.to_s +
+                    '8&teamId=' +
+                    self.number.to_s
         elsif self.league.site == 'Yahoo'
-            return 'https://football.fantasysports.yahoo.com/f1/' + self.league.number.to_s + '/' + self.number.to_s
+            return 'https://football.fantasysports.yahoo.com/f1/' +
+            self.league.number.to_s +
+            '/' +
+            self.number.to_s
         end
     end
 
@@ -38,14 +50,19 @@ class Team < ActiveRecord::Base
             end
         end
     end
-
+############### TODO fix this so it works for fucking leveon bell
     def get_values
         doc = Nokogiri::HTML(open('http://www.cbssports.com/fantasy/football/news/fantasy-football-week-11-rankings-trade-values-chart/'))
         players = Player.where(team: self)
         players.each do |t|
             name = t.name
-            path = doc.xpath("//td[text()[contains(., '#{name}')]]")[0]
+            unless name == "Le\'Veon Bell"
+                path = doc.xpath("//td[text()[contains(., '#{name}')]]")[0]
+            else
+                path = doc.xpath("//td[text()[contains(., 'Le\'Veon Bell')]]")[0]
+            end
             if path
+                puts path.next.next.text
                 t.update(value: path.next.next.text)
             end
         end
@@ -88,17 +105,17 @@ class Team < ActiveRecord::Base
     def normalize_values
         players = Player.where(team: self)
         players.each do |t|
-            new_value = t.value - Player.find_by(position: t.position).value
-            t.update(value: new_value)
+            if t.position == ('QB'||'WR'||'RB'||'TE')
+                free_value = Player.find_by(team: Team.find_by(number: 0), position: t.position).value
+                old_value = (t.value?  ? t.value : 0)
+                new_value = old_value - free_value
+                t.update(value: new_value)
+            end
         end
     end
 
 
 ############## FREE AGENCY
-    def f
-        get_free_agents('http://www.cbssports.com/fantasy/football/news/fantasy-football-week-11-rankings-trade-values-chart/', 'http://fantasy.nfl.com/league/4430415/players?playerStatus=available&position=1&statCategory=stats&statSeason=2016&statType=fourWeekStats&statWeek=10#playersHomeList=playersHomeList%2C%2Fleague%2F4430415%2Fplayers%253FplayerStatus%253Davailable%2526position%253D1%2526sort%253Dpts%2526statCategory%253Dstats%2526statSeason%253D2016%2526statType%253DfourWeekStats%2Creplace', 'http://fantasy.nfl.com/league/4430415/players?_selectedColumnSortOrder_=desc&playerStatus=available&position=3&sort=percentOwned&statCategory=research&statSeason=2016&statWeek=10#playersHomeList=playersHomeList%2C%2Fleague%2F4430415%2Fplayers%253FplayerStatus%253Davailable%2526position%253D3%2526sort%253Dpts%2526statCategory%253Dstats%2526statSeason%253D2016%2526statType%253DfourWeekStats%2Creplace', 'http://fantasy.nfl.com/league/4430415/players?_selectedColumnSortOrder_=desc&playerStatus=available&position=2&sort=percentOwned&statCategory=research&statSeason=2016&statWeek=10#playersHomeList=playersHomeList%2C%2Fleague%2F4430415%2Fplayers%253FplayerStatus%253Davailable%2526position%253D2%2526sort%253Dpts%2526statCategory%253Dstats%2526statSeason%253D2016%2526statType%253DfourWeekStats%2Creplace', 'http://fantasy.nfl.com/league/4430415/players?_selectedColumnSortOrder_=desc&playerStatus=available&position=4&sort=percentOwned&statCategory=research&statSeason=2016&statWeek=10#playersHomeList=playersHomeList%2C%2Fleague%2F4430415%2Fplayers%253FplayerStatus%253Davailable%2526position%253D4%2526sort%253Dpts%2526statCategory%253Dstats%2526statSeason%253D2016%2526statType%253DfourWeekStats%2Creplace' )
-    end
-
     def get_replacement(position, url, names)
         doc = Nokogiri::HTML(open(url))
         if self.league.site == 'NFL'
@@ -126,6 +143,7 @@ class Team < ActiveRecord::Base
         self.get_replacement('WR', wrUrl, playerNames)
         self.get_replacement('RB', rbUrl, playerNames)
         self.get_replacement('TE', teUrl, playerNames)
+        self.get_values
     end
 
 
