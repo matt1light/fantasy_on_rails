@@ -7,10 +7,6 @@ class Team < ActiveRecord::Base
 
     def make_url
         if self.league.site == 'NFL'
-            puts 'http://canada.fantasy.nfl.com/league/' +
-                 self.league.number.to_s +
-                 '/team/' +
-                 self.number.to_s
             return 'http://canada.fantasy.nfl.com/league/' +
                     self.league.number.to_s +
                     '/team/' +
