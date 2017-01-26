@@ -47,8 +47,8 @@ class League < ActiveRecord::Base
                                 self.make_url('TE'))
     end
 
-    def get_all_teams(size)
-        (1..size).each do |t|
+    def get_all_teams
+        (1..self.size).each do |t|
             unless t == 2
                 team = Team.create(league: self, number: t)
                 team.get_team
@@ -58,10 +58,10 @@ class League < ActiveRecord::Base
         end
     end
 
-    def import_league(size)
+    def import_league
         self.get_free_agents
-        self.get_all_teams(size)
-        (1..size).each do |t|
+        self.get_all_teams
+        (1..self.size).each do |t|
             unless t == 2
                 Team.find_by(league: self, number: t).normalize_values
             end

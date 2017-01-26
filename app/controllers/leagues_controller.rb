@@ -25,7 +25,7 @@ class LeaguesController < ApplicationController
   # POST /leagues.json
   def create
     @league = League.new(league_params)
-
+    @league.import_league
     respond_to do |format|
       if @league.save
         format.html { redirect_to @league, notice: 'League was successfully created.' }
@@ -42,6 +42,10 @@ class LeaguesController < ApplicationController
   def update
     respond_to do |format|
       if @league.update(league_params)
+        @league.team.each do |team|
+          team.destroy
+        end
+        @league.import_league
         format.html { redirect_to @league, notice: 'League was successfully updated.' }
         format.json { render :show, status: :ok, location: @league }
       else
@@ -69,6 +73,6 @@ class LeaguesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def league_params
-      params.require(:league).permit(:number, :site)
+      params.require(:league).permit(:number, :site, :size)
     end
 end

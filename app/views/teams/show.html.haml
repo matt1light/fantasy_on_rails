@@ -2,6 +2,28 @@
 %p
   %strong Number:
   = @team.number
+%p
+%table
+  %thead
+    %tr
+      %th Position
+      %th Starter
+      %th Name
+      %th Value
+      %th{:colspan => "3"}
+  %tbody
+    - @team.player.each do |player|
+      %tr
+        %td= player.position
+        %td= player.starter
+        %td= player.name
+        - if player.value < 4
+          %td= player.value
+        - else
+          %td= 4
+        %td= link_to 'Show', player
+        %td= link_to 'Edit', edit_player_path(player)
+        %td= link_to 'Destroy', player, method: :delete, data: { confirm: 'Are you sure?' }
 = link_to 'Edit', edit_team_path(@team)
 |
 \#{link_to 'Back', teams_path}
