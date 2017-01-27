@@ -17,10 +17,10 @@
         %td= player.position
         %td= player.starter
         %td= player.name
-        - if player.value < 4
+        - if player.value && player.value > 0
           %td= player.value
         - else
-          %td= 4
+          %td= 0
         %td= link_to 'Show', player
         %td= link_to 'Edit', edit_player_path(player)
         %td= link_to 'Destroy', player, method: :delete, data: { confirm: 'Are you sure?' }
