@@ -107,8 +107,6 @@ class NFLScraper < LeagueScraper
       # add a hash with all of these values to the players array
       @players << {name: name, position: position, team: number, nflteam: team_name}
     end
-    @players.select { |e| e.is_a? Hash }
-               .each { |h| h.each { |k,v| puts "#{k}=>#{v}" } }
   end
 end
 
