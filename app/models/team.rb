@@ -11,7 +11,13 @@ class Team < ActiveRecord::Base
         name = play[:name]
         position = play[:position]
         play_val = scraped_values.select{|p| p[:name] == name} 
-        if play_val.length == 1
+        if play_val.length == 0
+          Player.create( name: name,
+                         team: self,
+                         position: position,
+                         value: 0)
+
+        elsif play_val.length == 1
           value = play_val.first[:value]
           Player.create( name: name,
                          team: self,

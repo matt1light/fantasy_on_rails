@@ -30,7 +30,7 @@ class RankingsScraper < Scraper
   end
 
   def get_player_list
-    return @playerlist
+    @playerlist
   end
 end
 
@@ -69,15 +69,15 @@ class FantasyProsScraper < RankingsScraper
 end
 
 class LeagueScraper < Scraper
-  def initialize(league, team)
+  def initialize(league, team, league_size)
     super()
     @league = league
     @team = team
     @players = []
-    @league_size
+    @league_size = league_size
   end
 
-  def get_players
+  def scrape_players
     i = 1
     @league_size.times do
       scrape_team(i)
@@ -91,15 +91,19 @@ class LeagueScraper < Scraper
 			scrape_waiver_page(url)
     end
   end
+
+  def get_players
+    @players
+  end
 end
 
 class NFLScraper < LeagueScraper
-  def initialize(league, team)
-    super(league, team)
+  def initialize(league, team, league_size)
+    super(league, team, league_size)
   end
   
   def scrape_team(number) 
-    url = 'http://fantasy.nfl.com/league/' + @league + '/team/' + number 
+    url = 'http://fantasy.nfl.com/league/' + @league.to_s + '/team/' + number.to_s
     #opens the team page as HTML
     page = open_page(url)
     #gets the list of every row with a player in it
@@ -161,7 +165,7 @@ class NFLScraper < LeagueScraper
     # 8: Defense
 		[1, 2, 3, 4, 7, 8].each do |position_number|
 			url = 'http://fantasy.nfl.com/league/' +
-						@league + 
+            @league.to_s + 
 						'/players?_selectedColumnSortOrder_=desc&playerStatus=available&position=' +
 						position_number.to_s + 
 						'&sort=percentOwned&statCategory=research&statSeason=' +
@@ -183,8 +187,3 @@ class ESPNScraper < LeagueScraper
 
 end
 
-ls = NFLScraper.new('4430415', '10')
-ls.scrape_team('1')
-# fs = FantasyProsScraper.new
-# fs.find_player_list
-# print fs.get_player_list[5]
