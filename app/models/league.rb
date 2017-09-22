@@ -1,13 +1,12 @@
-require_relative 'scraper'
-
+require 'scraper'
 class League < ActiveRecord::Base
     has_many :team, inverse_of: :league
     has_many :players
 
     def scrape_league(size)
       if self.site == 'NFL'
-        league_scraper = NFLScraper.new(self.number, '10', 10)
-        rankings_scraper = FantasyProsScraper.new
+        league_scraper = SCRAPERS::NFLScraper.new(self.number, '10', 10)
+        rankings_scraper = SCRAPERS::FantasyProsScraper.new
       else 
         puts 'NFL.com is currently the only active site for this tool'
       end

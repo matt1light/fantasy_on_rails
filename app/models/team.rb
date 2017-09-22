@@ -7,7 +7,7 @@ class Team < ActiveRecord::Base
     has_many :player, inverse_of: :team
 
     def make_players(scraped_players, scraped_values)
-      scraped_players.each do |play|
+      scraped_players.select{|p| p[:team] == self.number}.each do |play|
         name = play[:name]
         position = play[:position]
         play_val = scraped_values.select{|p| p[:name] == name} 
@@ -27,68 +27,6 @@ class Team < ActiveRecord::Base
           puts 'There is more than one player with that name and position'
         end
       end
-    end
-    # def make_url
-    #     if self.league.site == 'NFL'
-    #         puts 'http://canada.fantasy.nfl.com/league/' +
-    #              self.league.number.to_s +
-    #              '/team/' +
-    #              self.number.to_s
-    #         return 'http://canada.fantasy.nfl.com/league/' +
-    #                 self.league.number.to_s +
-    #                 '/team/' +
-    #                 self.number.to_s
-    #     elsif self.league.site == 'ESPN'
-    #         return 'http://games.espn.com/ffl/clubhouse?leagueId=' +
-    #                 self.league.number.to_s +
-    #                 '8&teamId=' +
-    #                 self.number.to_s
-    #     elsif self.league.site == 'Yahoo'
-    #         return 'https://football.fantasysports.yahoo.com/f1/' +
-    #         self.league.number.to_s +
-    #         '/' +
-    #         self.number.to_s
-    #     end
-    # end
-
-    # def get_team
-    #     doc = Nokogiri::HTML(open(self.make_url))
-    #     if self.league.site == 'NFL'
-    #         playerNames = doc.xpath("//a[contains(@class, 'playerName')]")
-    #         for name in playerNames do
-    #             position = name.next_element().text[0..1]
-    #             Player.create(name: name.text, position: position, team: self)
-    #         end
-    #     elsif self.league.site == 'ESPN'
-    #         playerNames = doc.xpath("//*(@class='flexpop')")
-    #         for name in playerNames do
-    #             position = name.next().text[-3..-1]
-    #             Player.create(name: name, position: position, team: self)
-    #         end
-    #     elsif self.league.site == 'yahoo'
-    #         playerNames = doc.xpath("//*(@class='Nowrap name F-link')")
-    #         for name in playerNames do
-    #             position = name.next_element().text[-3..-1]
-    #             Player.create(name: name, position: position, team: self)
-    #         end
-    #     end
-    # end
-############### TODO fix this so it works for fucking leveon bell
-    def get_values
-        doc = Nokogiri::HTML(open('http://www.cbssports.com/fantasy/football/news/fantasy-football-week-11-rankings-trade-values-chart/'))
-        players = Player.where(team: self)
-        players.each do |t|
-            name = t.name
-            unless name == "Le\'Veon Bell"
-                path = doc.xpath("//td[text()[contains(., '#{name}')]]")[0]
-            else
-                path = doc.xpath("//td[text()[contains(., 'Le\'Veon Bell')]]")[0]
-            end
-            if path
-                puts path.next.next.text
-                t.update(value: path.next.next.text)
-            end
-        end
     end
 
     def set_starters
@@ -168,7 +106,4 @@ class Team < ActiveRecord::Base
         self.get_replacement('TE', teUrl, playerNames)
         self.get_values
     end
-
-
-
 end

@@ -39,4 +39,12 @@ class TeamTest < ActiveSupport::TestCase
     assert_equal @team.player.second.value,
                  100
   end
+
+  test 'team should be ordered properly' do
+    league = League.new(number: 4430415, site: 'NFL')
+    league.scrape_league(10)
+
+    league.team[1].set_starters
+    binding.pry
+  end
 end
