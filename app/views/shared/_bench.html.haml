@@ -1,0 +1,15 @@
+.container
+  .card.bg-warning
+    .h1.text-success.text-center
+      Bench
+    .row.text-warning
+      - bench = team.player.select{|p| !p.starter}
+      - bench_lineup = []
+      - bench_lineup += bench.select{|b| b.position == 'QB'}
+      - bench_lineup += bench.select{|b| b.position == 'RB'}
+      - bench_lineup += bench.select{|b| b.position == 'WR'}
+      - bench_lineup += bench.select{|b| b.position == 'TE'}
+      - bench_lineup += bench.select{|b| b.position == 'K'}
+      - bench_lineup += bench.select{|b| b.position == 'DEF'}
+      - bench_lineup.each do |bench|
+        = render 'shared/player_card', player: bench

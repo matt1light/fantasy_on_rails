@@ -1,0 +1,15 @@
+.container
+  .card.bg-warning
+    .h1.text-success.text-center
+      Starters
+    .row.text-warning
+      - starters = team.player.select{|p| p.starter}
+      - starting_lineup = []
+      - starting_lineup += starters.select{|s| s.position == 'QB'}
+      - starting_lineup += starters.select{|s| s.position == 'RB'}
+      - starting_lineup += starters.select{|s| s.position == 'WR'}
+      - starting_lineup += starters.select{|s| s.position == 'TE'}
+      - starting_lineup += starters.select{|s| s.position == 'K'}
+      - starting_lineup += starters.select{|s| s.position == 'DEF'}
+      - starting_lineup.each do |starter|
+        = render 'shared/player_card', player: starter

@@ -2,9 +2,10 @@
 %p
   %strong Number:
   = @team.number
-  - @team.player.each do |player|
-    %p
-      = link_to player.name, player
+  = render 'shared/starters', team: @team
+  = render 'shared/bench', team: @team
+  -# - @team.player.sort_by{|p| p.value}.reverse.each do |player|
+  -#   = render 'shared/player_card', player: player
 = link_to 'Edit', edit_team_path(@team)
 |
 \#{link_to 'Back', teams_path}
