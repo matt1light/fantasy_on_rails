@@ -1,7 +1,7 @@
 require 'scraper'
 class League < ActiveRecord::Base
-    has_many :team, inverse_of: :league
-    has_many :players
+    has_many :team, inverse_of: :league, dependent: :destroy
+    has_many :players, dependent: :destroy
 
     def scrape_league
       if self.site == 'NFL'
@@ -20,7 +20,6 @@ class League < ActiveRecord::Base
 
     def make_teams(size, scraped_players, scraped_teams, scraped_values)
       (0..size).each do |team_number|
-          binding.pry
           name = scraped_teams.select{|t| t[:number] == team_number}.first&.[](:name) || 'Waiver Wire'
 
           team = Team.create(league: self, number: team_number, name: name)

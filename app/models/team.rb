@@ -1,10 +1,9 @@
 require 'open-uri'
 
-
 class Team < ActiveRecord::Base
     belongs_to :league, inverse_of: :team
     has_and_belongs_to_many :trade, inverse_of: :team
-    has_many :player, inverse_of: :team
+    has_many :player, inverse_of: :team, dependent: :destroy
 
     def make_players(scraped_players, scraped_values)
       scraped_players.select{|p| p[:team] == self.number}.each do |play|
@@ -75,7 +74,6 @@ class Team < ActiveRecord::Base
             end
         end
     end
-
 
 ############## FREE AGENCY
     def get_replacement(position, url, names)
