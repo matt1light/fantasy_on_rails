@@ -30,7 +30,7 @@ class LeaguesController < ApplicationController
       if @league.save
         format.html { redirect_to @league, notice: 'League was successfully created.' }
         format.json { render :show, status: :created, location: @league }
-        @league.scrape_league(10)
+        @league.scrape_league
       else
         format.html { render :new }
         format.json { render json: @league.errors, status: :unprocessable_entity }

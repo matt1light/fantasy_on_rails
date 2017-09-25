@@ -71,12 +71,13 @@ module SCRAPERS
   end
 
   class LeagueScraper < Scraper
-    def initialize(league, team, league_size)
+    def initialize(league, team)
       super()
       @league = league
       @team = team
+      @teams = []
       @players = []
-      @league_size = league_size
+      @league_size = 0
     end
 
     def scrape_players
@@ -98,13 +99,41 @@ module SCRAPERS
     def get_players
       @players
     end
+
+    def get_teams
+      @teams
+    end
+    
+    def get_league_size
+      @league_size
+    end
   end
 
   class NFLScraper < LeagueScraper
-    def initialize(league, team, league_size)
-      super(league, team, league_size)
+    def initialize(league, team)
+      super(league, team)
     end
     
+    def scrape_teams_info
+      url = 'http://fantasy.nfl.com/league/' + @league.to_s
+
+      page = open_page(url)
+
+      rows = page.css('tr').select{|t| t['class'].include?('team-')}
+
+      rows.each do |row|
+        name = row.css('a').select{|a| a['class'].include?('teamName')}.first.text
+        record = row.css('td').select{|td| td['class'].include?('teamRecord')}.first.text
+        image = row.css('img').first['src']
+
+        class_name = row['class']
+        number = class_name[class_name.index('-') + 1].to_i
+
+        @league_size += 1
+        @teams << {name: name, record: record, image: image, number: number}
+      end
+    end
+
     def scrape_team(number) 
       url = 'http://fantasy.nfl.com/league/' + @league.to_s + '/team/' + number.to_s
       #opens the team page as HTML
