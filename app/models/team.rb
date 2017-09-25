@@ -27,6 +27,7 @@ class Team < ActiveRecord::Base
           puts 'There is more than one player with that name and position'
         end
       end
+      self.set_starters
     end
 
     def set_starters
