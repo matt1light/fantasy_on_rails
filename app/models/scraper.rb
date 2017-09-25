@@ -3,6 +3,7 @@ require 'nokogiri'
 require 'open-uri'
 require 'pry'
 require 'pry-byebug'
+require 'launchy'
 
 module SCRAPERS
   class Scraper
