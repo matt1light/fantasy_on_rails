@@ -1,4 +1,3 @@
-# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -11,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161116063247) do
+ActiveRecord::Schema.define(version: 20170922194510) do
 
   create_table "leagues", force: :cascade do |t|
     t.integer  "number"
@@ -24,38 +23,35 @@ ActiveRecord::Schema.define(version: 20161116063247) do
     t.string   "position"
     t.boolean  "starter"
     t.string   "name"
-    t.decimal  "value"
+    t.integer  "value"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer  "team_id"
+    t.index ["team_id"], name: "index_players_on_team_id"
   end
-
-  add_index "players", ["team_id"], name: "index_players_on_team_id"
 
   create_table "players_trades", id: false, force: :cascade do |t|
     t.integer "player_id"
     t.integer "trade_id"
+    t.index ["player_id"], name: "index_players_trades_on_player_id"
+    t.index ["trade_id"], name: "index_players_trades_on_trade_id"
   end
-
-  add_index "players_trades", ["player_id"], name: "index_players_trades_on_player_id"
-  add_index "players_trades", ["trade_id"], name: "index_players_trades_on_trade_id"
 
   create_table "teams", force: :cascade do |t|
     t.integer  "number"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer  "league_id"
+    t.string   "name"
+    t.index ["league_id"], name: "index_teams_on_league_id"
   end
-
-  add_index "teams", ["league_id"], name: "index_teams_on_league_id"
 
   create_table "teams_trades", id: false, force: :cascade do |t|
     t.integer "team_id"
     t.integer "trade_id"
+    t.index ["team_id"], name: "index_teams_trades_on_team_id"
+    t.index ["trade_id"], name: "index_teams_trades_on_trade_id"
   end
-
-  add_index "teams_trades", ["team_id"], name: "index_teams_trades_on_team_id"
-  add_index "teams_trades", ["trade_id"], name: "index_teams_trades_on_trade_id"
 
   create_table "trades", force: :cascade do |t|
     t.integer  "my_value"
@@ -63,8 +59,7 @@ ActiveRecord::Schema.define(version: 20161116063247) do
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
     t.integer  "league_id"
+    t.index ["league_id"], name: "index_trades_on_league_id"
   end
-
-  add_index "trades", ["league_id"], name: "index_trades_on_league_id"
 
 end
