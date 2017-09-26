@@ -41,10 +41,19 @@ class TeamTest < ActiveSupport::TestCase
   end
 
   test 'team should be ordered properly' do
+    # Fixtures is something that I will need soon
     league = League.new(number: 4430415, site: 'NFL')
-    league.scrape_league(10)
+    league.scrape_league
 
     league.team[1].set_starters
-    binding.pry
+  end
+
+  test 'team should return the proper starters total' do
+    league = League.new(number: 4430415, site: 'NFL')
+    league.scrape_league
+
+    league.team[1].set_starters
+    assert_equal 208, 
+                 league.team[1].get_starters_total
   end
 end

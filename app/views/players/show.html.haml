@@ -1,16 +1,34 @@
 %p#notice= notice
+.jumbotron
+  .row
+    .col-md-4
+      .well.well-sm
+        .media
+          %a.thumbnail.pull-left{:href => "#"}
+            %img.media-object{:src => "http://critterapp.pagodabox.com/img/user.jpg"}/
+          .media-body
+            %h4.media-heading 
+              = @player.name
+            %p
+              %span.label.label-info 
+                = 'Position: ' + @player.position.to_s
+              %span.label.label-warning
+                = 'Value: ' + @player.value.to_s
+            %p
+              %a.btn.btn-xs.btn-default{:href => ""}
+                %span.glyphicon.glyphicon-comment
+                News
+              %a.btn.btn-xs.btn-default{:href => "#"}
+                %span.glyphicon.glyphicon-heart
+                Favorite
+              %a.btn.btn-xs.btn-default{:href => "#"}
+                %span.glyphicon.glyphicon-ban-circle
+                Unfollow
 %p
-  %strong Position:
-  = @player.position
-%p
-  %strong Starter:
-  = @player.starter
-%p
-  %strong Name:
-  = @player.name
-%p
-  %strong Value:
-  = @player.value
-= link_to 'Edit', edit_player_path(@player)
-|
-\#{link_to 'Back', players_path}
+  .h3.container-fluid.text-center
+    - if @player.has_replacement?
+      = 'There are a number of better options available on the waiver wire'
+      - @player.find_replacement[0..2].each do |replacement|
+        =  render 'shared/player_card', player: replacement
+    - else
+      = 'There are no better options available on the waiver wire at this position'
