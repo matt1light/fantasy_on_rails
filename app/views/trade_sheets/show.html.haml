@@ -1,0 +1,12 @@
+%p#notice= notice
+
+%p
+  %b Week:
+  = @trade_sheet.week
+%p
+  %b League:
+  = @trade_sheet.league
+
+= link_to 'Edit', edit_trade_sheet_path(@trade_sheet)
+\|
+= link_to 'Back', trade_sheets_path
