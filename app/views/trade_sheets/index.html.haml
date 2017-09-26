@@ -1,0 +1,23 @@
+%h1 Listing trade_sheets
+
+%table
+  %thead
+    %tr
+      %th Week
+      %th League
+      %th
+      %th
+      %th
+
+  %tbody
+    - @trade_sheets.each do |trade_sheet|
+      %tr
+        %td= trade_sheet.week
+        %td= trade_sheet.league
+        %td= link_to 'Show', trade_sheet
+        %td= link_to 'Edit', edit_trade_sheet_path(trade_sheet)
+        %td= link_to 'Destroy', trade_sheet, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Trade sheet', new_trade_sheet_path

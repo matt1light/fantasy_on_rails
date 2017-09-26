@@ -1,0 +1,9 @@
+= simple_form_for(@trade_sheet) do |f|
+  = f.error_notification
+
+  .form-inputs
+    = f.input :week
+    = f.association :league
+
+  .form-actions
+    = f.button :submit
