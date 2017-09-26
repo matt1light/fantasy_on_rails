@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170926191349) do
+ActiveRecord::Schema.define(version: 20170926192134) do
 
   create_table "leagues", force: :cascade do |t|
     t.integer  "number"
@@ -64,10 +64,12 @@ ActiveRecord::Schema.define(version: 20170926191349) do
   create_table "trades", force: :cascade do |t|
     t.integer  "my_value"
     t.integer  "other_value"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
     t.integer  "league_id"
+    t.integer  "trade_sheet_id"
     t.index ["league_id"], name: "index_trades_on_league_id"
+    t.index ["trade_sheet_id"], name: "index_trades_on_trade_sheet_id"
   end
 
 end
