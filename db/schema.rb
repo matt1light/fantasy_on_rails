@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170926192134) do
+ActiveRecord::Schema.define(version: 20170929051357) do
 
   create_table "leagues", force: :cascade do |t|
     t.integer  "number"
@@ -44,6 +44,12 @@ ActiveRecord::Schema.define(version: 20170926192134) do
     t.integer  "league_id"
     t.string   "name"
     t.index ["league_id"], name: "index_teams_on_league_id"
+  end
+
+  create_table "teams_trade_sheets", id: false, force: :cascade do |t|
+    t.integer "trade_sheet_id", null: false
+    t.integer "team_id",        null: false
+    t.index ["trade_sheet_id", "team_id"], name: "index_teams_trade_sheets_on_trade_sheet_id_and_team_id"
   end
 
   create_table "teams_trades", id: false, force: :cascade do |t|
