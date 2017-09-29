@@ -45,7 +45,7 @@ module SCRAPERS
   class FantasyProsScraper < RankingsScraper
     def initialize
       super
-      make_url(3)
+      make_url(4)
     end
 
     def make_url(week)
@@ -127,7 +127,7 @@ module SCRAPERS
         image = row.css('img').first['src']
 
         class_name = row['class']
-        number = class_name[class_name.index('-') + 1].to_i
+        number = class_name[class_name.index('-') + 1..class_name.index(' ')].to_i
 
         @league_size += 1
         @teams << {name: name, record: record, image: image, number: number}
