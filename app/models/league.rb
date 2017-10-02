@@ -1,7 +1,6 @@
 require 'scraper'
 class League < ActiveRecord::Base
     has_many :team, inverse_of: :league, dependent: :destroy
-    has_many :players, dependent: :destroy
     has_many :trade_sheets, inverse_of: :league, dependent: :destroy
 
     def scrape_league
